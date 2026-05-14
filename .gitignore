@@ -1,0 +1,9 @@
+.DS_Store
+*.tmp
+*.bak
+~$*
+.env
+node_modules/
+
+# Private — raw chat transcript with strategic deliberations and individual party names
+KKc bussiness.md

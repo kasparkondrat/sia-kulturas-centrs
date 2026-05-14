@@ -1,0 +1,267 @@
+{
+  "_meta": {
+    "description": "SIA Kulturas centrs — viens patiesības avots gada pārskata skaidrojumam un interaktīvajam vērtējuma rīkam",
+    "compiled_date": "2026-05-14",
+    "primary_source": "Kultūras centrs_gada pārskats.pdf (parakstīts 2026-03-19, grāmatvedis: Signe Silova / SIA Laimes Brīdis)",
+    "secondary_sources": [
+      "PZA2 PZ_KC_2018-2025.xlsx (operatīvā P&L)",
+      "Bilance (LAT), jauna_KC_2020-2025.xlsx (operatīvā bilance)",
+      "PKIP - Pašu kapitāla izmaiņu pārskats_KC_2020-2025.xlsx",
+      "Finanšu modelis.xlsx (ārējais vērtētājs, 2024-05)",
+      "KKC_Budget_Scenarios_2026_2041.xlsx (Scenario 2)",
+      "SIA_KC_Shareholder_Overview.md"
+    ]
+  },
+  "company": {
+    "name": "SIA \"Kultūras centrs\"",
+    "reg_nr": "40103381801",
+    "address": "Skolas iela 15, Rīga, LV-1010",
+    "registered": "2011-02-16",
+    "board_member": "Kaspars Kondratjuks",
+    "official_shareholder": "Kaspars Kondratjuks (vienīgais dalībnieks pēc Komercreģistra)",
+    "accountant_in_house": "Signe Silova",
+    "accountant_outsourced": "SIA \"Laimes Brīdis\", reģ.nr. 40103759132",
+    "share_capital": 53000
+  },
+  "balance_sheet_2025": {
+    "_source": "Oficiālais gada pārskats par 2025. gadu, parakstīts 2026-03-19",
+    "as_of": "2025-12-31",
+    "assets": {
+      "long_term": {
+        "leasehold_improvements": 405711,
+        "other_fixed_assets": 1156,
+        "long_term_receivables": 4000,
+        "total": 410867
+      },
+      "current": {
+        "inventory_advances": 17721,
+        "trade_receivables": 9580,
+        "other_debtors": 2300,
+        "deferred_costs": 7,
+        "cash": 3022,
+        "total": 32630
+      },
+      "total": 443497
+    },
+    "liabilities_equity": {
+      "equity": {
+        "share_capital": 53000,
+        "retained_losses_prior": -55562,
+        "current_year_result": -19814,
+        "total": -22376
+      },
+      "long_term_creditors": {
+        "other_borrowings": 431711,
+        "total": 431711
+      },
+      "short_term_creditors": {
+        "customer_advances": 0,
+        "trade_payables": 14490,
+        "tax_payables": 6071,
+        "other_creditors": 1804,
+        "accrued_liabilities": 11797,
+        "total": 34162
+      },
+      "total": 443497
+    }
+  },
+  "balance_sheet_2024": {
+    "_source": "Oficiālais gada pārskats par 2025. gadu, salīdzinošā kolonna",
+    "as_of": "2024-12-31",
+    "assets": {
+      "long_term": {
+        "leasehold_improvements": 435988,
+        "other_fixed_assets": 895,
+        "long_term_receivables": 4500,
+        "total": 441383
+      },
+      "current": {
+        "inventory_advances": 17721,
+        "trade_receivables": 11015,
+        "other_debtors": 3738,
+        "deferred_costs": 7,
+        "cash": 1502,
+        "total": 33983
+      },
+      "total": 475366
+    },
+    "liabilities_equity": {
+      "equity": {
+        "share_capital": 53000,
+        "retained_losses_prior": 13969,
+        "current_year_result": -69532,
+        "total": -2563
+      },
+      "long_term_creditors": {
+        "other_borrowings": 440317,
+        "total": 440317
+      },
+      "short_term_creditors": {
+        "customer_advances": 9091,
+        "trade_payables": 26269,
+        "tax_payables": 1846,
+        "other_creditors": 406,
+        "accrued_liabilities": 0,
+        "total": 37612
+      },
+      "total": 475366
+    }
+  },
+  "pl_2025_official": {
+    "_source": "Oficiālais gada pārskats par 2025. gadu",
+    "net_turnover": 117160,
+    "cogs": 118220,
+    "gross_profit": -1060,
+    "selling_expenses": 12,
+    "admin_expenses": 3181,
+    "other_op_income": 2810,
+    "other_op_expenses": 1522,
+    "interest_expense": 16849,
+    "pretax_result": -19814,
+    "income_tax": 0,
+    "net_result": -19814
+  },
+  "pl_2024_official": {
+    "_source": "Oficiālais gada pārskats par 2025. gadu, salīdzinošā kolonna",
+    "net_turnover": 85993,
+    "cogs": 162972,
+    "gross_profit": -76979,
+    "selling_expenses": 11,
+    "admin_expenses": 2855,
+    "other_op_income": 11355,
+    "other_op_expenses": 291,
+    "interest_expense": 751,
+    "pretax_result": -69532,
+    "income_tax": 0,
+    "net_result": -69532
+  },
+  "pl_history_internal": {
+    "_source": "PZA2 PZ_KC_2018-2025.xlsx (operatīvā uzskaite, pirms gada noslēguma adjustējumiem)",
+    "_note": "2025. gada operatīvie skaitļi atšķiras no oficiālā pārskata par ~€47k gada beigu adjustējumu dēļ (papildu amortizācija ~€33k + procentu uzkrāšana ~€15k)",
+    "years": {
+      "2018": {"revenue": 81920, "net_result": -17109},
+      "2019": {"revenue": 71455, "net_result": 12536},
+      "2020": {"revenue": 88179, "net_result": 12956},
+      "2021": {"revenue": 105342, "net_result": -181},
+      "2022": {"revenue": 7254, "net_result": -39616},
+      "2023": {"revenue": 20514, "net_result": 51883},
+      "2024": {"revenue": 85993, "net_result": -69532},
+      "2025_internal": {"revenue": 117160, "net_result": 27767, "_note": "Pirms gada beigu adjustējumiem"},
+      "2025_official": {"revenue": 117160, "net_result": -19814, "_note": "Pēc grāmatveža adjustējumiem"}
+    }
+  },
+  "balance_history": {
+    "_source": "Bilance (LAT), jauna_KC_2020-2025.xlsx + oficiālais 2025 gada pārskats",
+    "_note": "2020-2024 dati no operatīvās bilances; 2025 — oficiālais",
+    "years": {
+      "2020": {"total": 47618, "equity": 4882, "loans": 0, "fixed_assets": 322},
+      "2021": {"total": 236428, "equity": 4702, "loans": 120000, "fixed_assets": 156707},
+      "2022": {"total": 332210, "equity": -34914, "loans": 265700, "fixed_assets": 313094},
+      "2023": {"total": 516829, "equity": 66969, "loans": 397211, "fixed_assets": 453782},
+      "2024": {"total": 475366, "equity": -2563, "loans": 440317, "fixed_assets": 436883},
+      "2025": {"total": 443497, "equity": -22376, "loans": 431711, "fixed_assets": 406867}
+    }
+  },
+  "ebitda_2025_calc": {
+    "_note": "EBITDA aprēķins no oficiālā P&L",
+    "operating_result_before_other": -1060,
+    "less_admin": -3181,
+    "less_selling": -12,
+    "plus_other_income": 2810,
+    "less_other_expenses": -1522,
+    "operating_result": -2965,
+    "plus_depreciation_estimated": 30277,
+    "ebitda_estimate": 27312,
+    "_alternative_method": "No operatīvās uzskaites: bruto peļņa €31,985 + adjustējumi = ~€27,000 EBITDA"
+  },
+  "loans": {
+    "_status_as_of": "2026-05-13 (jaunā vienošanās)",
+    "by_lender": {
+      "salmo_gv": {
+        "principal": 250000,
+        "monthly_payment_principal_only": 2700,
+        "term_months": 92,
+        "interest_rate_annual": 0.04,
+        "interest_treatment": "Atlikts uz perioda beigām (balloon)",
+        "first_payment_made": "2026-05-13"
+      },
+      "rododendri": {
+        "principal": 182000,
+        "monthly_payment_principal_only": 1978,
+        "term_months": 92,
+        "interest_rate_annual": 0.04,
+        "interest_treatment": "Atlikts uz perioda beigām (balloon)",
+        "_note": "Tāda pati vienošanās kā ar SALMO, mēneša summa proporcionāli aprēķināta (€182k / 92mēn). Precizēt ar Kasparu."
+      },
+      "off_books": {
+        "principal": 66911,
+        "monthly_payment_principal_only": 0,
+        "interest_rate_annual": 0,
+        "interest_treatment": "Nav formāla grafika"
+      }
+    },
+    "total_principal_formal": 432000,
+    "total_principal_with_offbooks": 498911,
+    "_balance_sheet_position_2025": 431711,
+    "_balance_sheet_note": "Bilancē uzrādītais €431,711 atbilst formālo aizdevumu apjomam pēc 2025. gada (mazliet samazinājies pret 2024 €440,317 — daļēja amortizācija pirms 2026-05-13 vienošanās)"
+  },
+  "external_valuation": {
+    "_source": "Finanšu modelis.xlsx, DCF aprēķins sheet, ~2024-05",
+    "valuation_date": "2024-05-31",
+    "method": "DCF + WACC ar CAPM",
+    "iteration_1": {
+      "wacc": 0.0601,
+      "dcf_10y": 131205,
+      "terminal_value": 1644207,
+      "equity_value_100pct": 1388005
+    },
+    "iteration_2": {
+      "wacc": 0.0857,
+      "dcf_10y": 100353,
+      "terminal_value": 903100,
+      "equity_value_100pct": 616045
+    },
+    "_assumptions_diverge_from_reality": {
+      "operating_model": "Modelēts visu stāvu komerciāla iznomāšana — nav realitāte (Sarūsējis tikai 1F, KLKC 2-3F)",
+      "ebitda_assumed": "€91k (2025) augot līdz €142k (2034) — neatbilst Scenario 2 ar €59-65k",
+      "renovation_loan": "Modelēts jauns €260k aizdevums — nav realitāte"
+    }
+  },
+  "revenue_2025_breakdown": {
+    "_source": "Konts 6110 PZA, salīdzināts ar Sarūsējis nomas līgumu",
+    "_note": "Apgrozījums €117,160 ir kopējais 2025. gads — Sarūsējis kļuva pilnībā operatīvs",
+    "estimated_components": {
+      "fixed_rent_sarusejis": 50400,
+      "variable_rent_sarusejis": 38000,
+      "nin_recharge": 2256,
+      "utilities_recharge_klkc": 20760,
+      "other_smaller_revenue": 5744
+    }
+  },
+  "concentration_risk": {
+    "primary_tenant": "SIA Sarūsējis (reģ.nr. 40203413041, valde Nauris Krēsliņš)",
+    "sublease_signed": "2023-06-28",
+    "sublease_term_months": 100,
+    "sublease_expires_approx": "2031-10",
+    "revenue_dependency_pct": 100,
+    "primary_landlord": "Studentu korporācijas \"Fraternitas Lettica\" filistru biedrība",
+    "fl_reg_nr": "40008004496",
+    "kc_to_fl_rent_monthly": 863,
+    "kc_to_fl_arrears_monthly": 148
+  },
+  "ebitda_projections_scenario2": {
+    "_source": "KKC_Budget_Scenarios_2026_2041.xlsx, Scenario 2 (KC tikai 1F)",
+    "years": {
+      "2026": {"revenue": 95080, "opex": 45694, "ebitda": 49386},
+      "2027": {"revenue": 118896, "opex": 59633, "ebitda": 59263},
+      "2028": {"revenue": 119806, "opex": 59633, "ebitda": 60172},
+      "2029": {"revenue": 120733, "opex": 59633, "ebitda": 61100},
+      "2030": {"revenue": 121680, "opex": 59633, "ebitda": 62047},
+      "2031": {"revenue": 122645, "opex": 59633, "ebitda": 63012},
+      "2032": {"revenue": 123630, "opex": 59633, "ebitda": 63996},
+      "2033": {"revenue": 124634, "opex": 59633, "ebitda": 65001},
+      "2034": {"revenue": 125658, "opex": 59633, "ebitda": 66025},
+      "2035": {"revenue": 126703, "opex": 59633, "ebitda": 67070}
+    }
+  }
+}

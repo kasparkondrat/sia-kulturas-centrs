@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+<meta charset="UTF-8">
+<title>SIA "Kultūras centrs" — Uzņēmuma vērtējuma rīks</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #666;
+    --accent: #2c5f8d;
+    --accent-light: #e6eef5;
+    --bg: #f5f5f0;
+    --card: #fff;
+    --border: #d8d8d0;
+    --pos: #2d7a3d;
+    --neg: #b03030;
+    --warn: #b87a00;
+    --bg-warn: #fff8e6;
+    --bg-pos: #eef7f0;
+    --bg-neg: #fbeeee;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    font-size: 15px;
+  }
+  header {
+    background: linear-gradient(135deg, #2c5f8d 0%, #1a3d5c 100%);
+    color: white;
+    padding: 28px 40px;
+  }
+  header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+  header .sub { opacity: 0.85; margin-top: 4px; font-size: 14px; }
+  main {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 24px 30px 60px;
+  }
+  section {
+    background: var(--card);
+    margin: 20px 0;
+    padding: 22px 26px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  section h2 {
+    margin: 0 0 12px;
+    color: var(--accent);
+    font-size: 18px;
+    border-bottom: 2px solid var(--accent-light);
+    padding-bottom: 8px;
+  }
+  section h3 { font-size: 15px; margin: 16px 0 6px; color: #444; }
+  .row { display: flex; gap: 18px; flex-wrap: wrap; }
+  .col { flex: 1; min-width: 220px; }
+  .stat {
+    background: var(--accent-light);
+    padding: 12px 16px;
+    border-radius: 6px;
+    border-left: 4px solid var(--accent);
+  }
+  .stat .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat .value { font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; margin-top: 4px; }
+  .stat .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .pos { color: var(--pos); }
+  .neg { color: var(--neg); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 14px;
+    font-size: 13px;
+  }
+  th, td {
+    border-bottom: 1px solid var(--border);
+    padding: 6px 9px;
+    text-align: left;
+  }
+  th { background: #f8f7f0; font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .panel {
+    background: #fafaf8;
+    padding: 16px 18px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .slider-row { margin: 10px 0; }
+  .slider-row label {
+    display: block;
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 3px;
+  }
+  .slider-row .val-display {
+    float: right;
+    font-weight: 600;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  input[type="range"] {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    background: var(--border);
+    border-radius: 3px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+  input[type="number"] {
+    width: 80px;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .radio-group { display: flex; gap: 12px; flex-wrap: wrap; margin: 8px 0; }
+  .radio-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 5px 9px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .radio-group input { margin: 0; }
+  .result-box {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: var(--bg-pos);
+    border-left: 4px solid var(--pos);
+    border-radius: 4px;
+  }
+  .result-box.neg { background: var(--bg-neg); border-left-color: var(--neg); }
+  .result-box.warn { background: var(--bg-warn); border-left-color: var(--warn); }
+  .result-box .big { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .chart-wrap { position: relative; height: 280px; margin-top: 12px; }
+  .note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; }
+  details summary { cursor: pointer; font-size: 13px; color: var(--accent); margin: 8px 0; }
+  details[open] summary { font-weight: 600; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 11px;
+    border-radius: 10px;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .badge.warn { background: var(--bg-warn); color: var(--warn); }
+  .badge.neg { background: var(--bg-neg); color: var(--neg); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 800px) { .grid2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SIA "Kultūras centrs" — Uzņēmuma vērtējuma rīks</h1>
+  <div class="sub">Interaktīva analīze stratēģisku lēmumu pieņemšanai · Sagatavots 2026-05 · Kaspars Kondratjuks (valdes loceklis)</div>
+</header>
+
+<main>
+
+<div style="background:#fff8e6;border-left:4px solid #b87a00;padding:14px 18px;margin:16px 0 0;border-radius:0 6px 6px 0;font-size:14px;">
+<strong>Struktūras maiņa 2026-06-01:</strong> Šajā rīkā izmantotie Scenario 2 projekciju dati (2026-2041) atspoguļo <em>jauno struktūru</em>, kas stājas spēkā 2026-06-01 atbilstoši 3 jauniem līgumiem (FL→KLKC noma 30.09.2025; KC→KLKC būvprojekta pārdošana 29.09.2025; Vienošanās Nr.2 KC↔FL 15.12.2025). KC apsaimnieko tikai 1F+pagrabu; KLKC tieši nomā 2-3F no FL. Sk. detalizētu paskaidrojumu <a href="2025_gada_parskata_skaidrojums.html#s8a">gada pārskata skaidrojuma 8.A sadaļā</a>.
+</div>
+
+<!-- ============ SECTION A: SNAPSHOT ============ -->
+<section>
+  <h2>A. Situācijas momentuzņēmums (2025-12-31)</h2>
+  <p style="color:var(--muted);font-size:13px;margin:0 0 14px;">Sākotnējie dati no oficiālā 2025. gada pārskata (parakstīts 2026-03-19). Šie skaitļi ir fakti — turpmāk visi aprēķini balstās uz tiem.</p>
+  <div class="row">
+    <div class="col"><div class="stat">
+      <div class="label">Apgrozījums 2025</div>
+      <div class="value">€117,160</div>
+      <div class="sub pos">+36% pret 2024</div>
+    </div></div>
+    <div class="col"><div class="stat">
+      <div class="label">Neto rezultāts 2025</div>
+      <div class="value neg">-€19,814</div>
+      <div class="sub pos">3.5× mazāki zaud. pret 2024</div>
+    </div></div>
+    <div class="col"><div class="stat">
+      <div class="label">Pašu kapitāls</div>
+      <div class="value neg">-€22,376</div>
+      <div class="sub">Negatīvs (KL 196.p. spēkā)</div>
+    </div></div>
+    <div class="col"><div class="stat">
+      <div class="label">Ilgtermiņa aizņēmumi</div>
+      <div class="value">€431,711</div>
+      <div class="sub">SALMO + Rododendri + cits</div>
+    </div></div>
+    <div class="col"><div class="stat">
+      <div class="label">Nauda gada beigās</div>
+      <div class="value">€3,022</div>
+      <div class="sub">Spiesta likviditāte</div>
+    </div></div>
+    <div class="col"><div class="stat">
+      <div class="label">Bilance kopā</div>
+      <div class="value">€443,497</div>
+      <div class="sub">Aktīvi = pasīvi</div>
+    </div></div>
+  </div>
+  <details>
+    <summary>Detalizēta bilance un PZA</summary>
+    <div class="grid2" style="margin-top:10px">
+      <div>
+        <h3>Aktīvi €443,497</h3>
+        <table>
+          <tr><td>Ilgtermiņa ieguldījumi nomātajos pamatlīdzekļos</td><td class="num">€405,711</td></tr>
+          <tr><td>Pārējie pamatlīdzekļi</td><td class="num">€1,156</td></tr>
+          <tr><td>Citi ilgtermiņa debitori</td><td class="num">€4,000</td></tr>
+          <tr><td>Krājumu avansi</td><td class="num">€17,721</td></tr>
+          <tr><td>Pircēju parādi</td><td class="num">€9,580</td></tr>
+          <tr><td>Citi debitori</td><td class="num">€2,300</td></tr>
+          <tr><td>Nauda</td><td class="num">€3,022</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3>Pasīvi €443,497</h3>
+        <table>
+          <tr><td>Pamatkapitāls</td><td class="num">€53,000</td></tr>
+          <tr><td>Uzkrātie zaudējumi</td><td class="num neg">-€75,376</td></tr>
+          <tr><td>Ilgtermiņa aizņēmumi</td><td class="num">€431,711</td></tr>
+          <tr><td>Parādi piegādātājiem</td><td class="num">€14,490</td></tr>
+          <tr><td>Nodokļi</td><td class="num">€6,071</td></tr>
+          <tr><td>Uzkrātās saistības</td><td class="num">€11,797</td></tr>
+          <tr><td>Pārējie kreditori</td><td class="num">€1,804</td></tr>
+        </table>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ============ SECTION B: VALUATION METHODS ============ -->
+<section>
+  <h2>B. Vērtējuma metodes</h2>
+  <p style="color:var(--muted);font-size:13px;">Četras savstarpēji papildinošas pieejas. Pārvietojiet slīderus, lai redzētu, kā mainās uzņēmuma vērtība atkarībā no pieņēmumiem.</p>
+
+  <!-- B0: External -->
+  <div class="panel" style="margin-bottom:14px;border-left:4px solid var(--muted)">
+    <h3><span class="badge">B.0</span> Ārējā vērtētāja aprēķins (2024-05)</h3>
+    <p style="font-size:13px;margin:6px 0">Ārējais konsultants veica DCF vērtējumu 2024. gada maijā, pieņemot citu biznesa modeli (visu stāvu komerciāla iznomāšana). Rezultāti:</p>
+    <table>
+      <thead><tr><th>Iterācija</th><th class="num">WACC</th><th class="num">DCF 10 gadi</th><th class="num">Terminal value</th><th class="num">Pašu kapitāls (100%)</th></tr></thead>
+      <tbody>
+        <tr><td>1. (grāmatv. equity)</td><td class="num">6.01%</td><td class="num">€131,205</td><td class="num">€1,644,207</td><td class="num pos">€1,388,005</td></tr>
+        <tr><td>2. (tirgus equity)</td><td class="num">8.57%</td><td class="num">€100,353</td><td class="num">€903,100</td><td class="num pos">€616,045</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Pieņēmumi: Sarūsējis modelis nebija ņemts vērā; pieņemts visu stāvu īres modelis ar 75% noslodzi. 2025. faktiskais apgrozījums (€117k) bija 24% augstāks par ārējā modelēto (€94k), bet ar zemāku EBITDA dēļ Sarūsējis ekskluzivitātes.</p>
+  </div>
+
+  <div class="grid2">
+    <!-- B1: EBITDA multiple -->
+    <div class="panel">
+      <h3><span class="badge">B.1</span> EBITDA × Multiplikators</h3>
+      <div class="slider-row">
+        <label>Stabils gada EBITDA <span class="val-display" id="b1-ebitda-val">€60,000</span></label>
+        <input type="range" id="b1-ebitda" min="30000" max="120000" step="1000" value="60000">
+      </div>
+      <div class="slider-row">
+        <label>Multiplikators <span class="val-display" id="b1-mult-val">4.0x</span></label>
+        <input type="range" id="b1-mult" min="1" max="8" step="0.1" value="4">
+      </div>
+      <div class="slider-row">
+        <label>Neto parāds (default €432k formālais) <span class="val-display" id="b1-debt-val">€432,000</span></label>
+        <input type="range" id="b1-debt" min="0" max="600000" step="10000" value="432000">
+      </div>
+      <div class="result-box" id="b1-result">
+        <div style="font-size:12px">Enterprise Value (EV)</div>
+        <div class="big" id="b1-ev">€240,000</div>
+        <div style="font-size:12px;margin-top:6px">Equity Value (EV − Neto parāds)</div>
+        <div class="big" id="b1-eq">-€192,000</div>
+      </div>
+      <p class="note">EBITDA × Multiplikators ir vienkāršākā metode. Mazi privāti uzņēmumi parasti tiek vērtēti 3-5x. Real estate holding 4-7x. Single-tenant risk → tuvāk apakšējam diapazonam.</p>
+    </div>
+
+    <!-- B2: DCF -->
+    <div class="panel">
+      <h3><span class="badge">B.2</span> Diskontētā naudas plūsma (DCF)</h3>
+      <div class="slider-row">
+        <label>Diskonta likme (WACC) <span class="val-display" id="b2-disc-val">10.0%</span></label>
+        <input type="range" id="b2-disc" min="6" max="18" step="0.1" value="10">
+      </div>
+      <div class="slider-row">
+        <label>Terminal pieaugums <span class="val-display" id="b2-grow-val">2.0%</span></label>
+        <input type="range" id="b2-grow" min="-2" max="3" step="0.1" value="2">
+      </div>
+      <div class="slider-row">
+        <label>Sarūsējis līg. pagarinājuma varbūt. pēc 2031 <span class="val-display" id="b2-renew-val">75%</span></label>
+        <input type="range" id="b2-renew" min="0" max="100" step="5" value="75">
+      </div>
+      <div class="result-box" id="b2-result">
+        <div style="font-size:12px">DCF 2026-2041 (16 gadi)</div>
+        <div class="big" id="b2-dcf">€420,000</div>
+        <div style="font-size:12px;margin-top:6px">+ Terminal value diskontēts</div>
+        <div class="big" id="b2-tv">€280,000</div>
+        <div style="font-size:12px;margin-top:6px"><strong>Enterprise Value:</strong></div>
+        <div class="big pos" id="b2-ev">€700,000</div>
+        <div style="font-size:12px;margin-top:6px"><strong>Equity Value:</strong></div>
+        <div class="big" id="b2-eq">€268,000</div>
+      </div>
+    </div>
+
+    <!-- B3: NAV -->
+    <div class="panel">
+      <h3><span class="badge">B.3</span> Aktīvu pieeja (NAV)</h3>
+      <p style="font-size:13px;margin:6px 0">Bilance uzrāda pašu kapitālu <strong>-€22,376</strong>. Bet galvenais aktīvs (€405,711 ieguldījumi nomātajos pamatlīdzekļos) varētu būt vērts vairāk vai mazāk par grāmatvedības vērtību.</p>
+      <div class="slider-row">
+        <label>Ieguldījumu nomātajos pamatlīdzekļos taisīga vērtība <span class="val-display" id="b3-fv-val">100%</span></label>
+        <input type="range" id="b3-fv" min="0" max="150" step="5" value="100">
+      </div>
+      <div class="result-box" id="b3-result">
+        <div style="font-size:12px">Pielāgota aktīvu vērtība</div>
+        <div class="big" id="b3-assets">€443,497</div>
+        <div style="font-size:12px;margin-top:6px">Mīnus saistības (€465,873)</div>
+        <div class="big" id="b3-nav">-€22,376</div>
+      </div>
+      <p class="note">Ieguldījumi nomātajos pamatlīdzekļos ir specifiski šai konkrētajai nomas attiecībai ar FL — to "taisīga vērtība" tirgū parasti ir zemāka par bilanci. Tomēr, ja jaunā ēkas izmantotāja maksātgribu pamatojas uz iepriekšējām investīcijām, tā varētu būt augstāka.</p>
+    </div>
+
+    <!-- B4: Combined view -->
+    <div class="panel">
+      <h3><span class="badge">B.4</span> Apkopojums un diapazons</h3>
+      <p style="font-size:13px;margin:6px 0">Trīs metožu rezultātu salīdzinājums + ārējā vērtējuma kontekstualizācija:</p>
+      <table>
+        <thead><tr><th>Metode</th><th class="num">Equity Value</th></tr></thead>
+        <tbody>
+          <tr><td>B.1 EBITDA multiple</td><td class="num" id="b4-b1">—</td></tr>
+          <tr><td>B.2 DCF</td><td class="num" id="b4-b2">—</td></tr>
+          <tr><td>B.3 NAV</td><td class="num" id="b4-b3">—</td></tr>
+          <tr style="background:#f8f7f0"><td><strong>Vidējais</strong></td><td class="num" id="b4-avg"><strong>—</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="chart-wrap" style="height:200px"><canvas id="b4-chart"></canvas></div>
+      <p class="note">Atšķirību iemesli: EBITDA pieeja ņem vērā operatīvo peļņu; DCF pieskaita laika faktoru un naudas plūsmu; NAV balstās uz bilanci. Liels diapazons norāda uz nenoteiktību — sarunās ar kreditoriem izmantojama kā arguments par jutīgumu.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION C: LOAN SCENARIOS ============ -->
+<section>
+  <h2>C. Aizdevumu scenāriji</h2>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:8px;">Izvēlieties scenāriju, lai redzētu DSCR, kumulatīvo naudas plūsmu un kopējos procentu izdevumus.</p>
+
+  <div class="radio-group">
+    <label><input type="radio" name="c-scenario" value="new" checked> <strong>Jaunais (2026-05-13):</strong> 92 mēn, tikai pamatsumma, procenti balloon</label>
+    <label><input type="radio" name="c-scenario" value="old60"> Vēsturiskais 60 mēn (amortizācija)</label>
+    <label><input type="radio" name="c-scenario" value="ext96"> Konservatīvs 96 mēn (klasisks)</label>
+    <label><input type="radio" name="c-scenario" value="ext120"> Plašāks 120 mēn (klasisks)</label>
+  </div>
+
+  <div class="slider-row">
+    <label>Procentu likme (gadā) <span class="val-display" id="c-rate-val">4.0%</span></label>
+    <input type="range" id="c-rate" min="2" max="8" step="0.1" value="4">
+  </div>
+  <div class="slider-row">
+    <label>Stabils gada EBITDA <span class="val-display" id="c-ebitda-val">€62,000</span></label>
+    <input type="range" id="c-ebitda" min="40000" max="100000" step="1000" value="62000">
+  </div>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="col">
+      <h3>Galvenie rādītāji</h3>
+      <table id="c-metrics">
+        <tbody>
+          <tr><td>Mēneša cash outflow</td><td class="num" id="c-monthly">—</td></tr>
+          <tr><td>Gada cash outflow</td><td class="num" id="c-yearly">—</td></tr>
+          <tr><td>DSCR (cash bāzē)</td><td class="num" id="c-dscr">—</td></tr>
+          <tr><td>Termiņa beigas</td><td class="num" id="c-end">—</td></tr>
+          <tr><td>Kopējie procenti periodā</td><td class="num" id="c-interest">—</td></tr>
+          <tr><td>Balloon procenti perioda beigās</td><td class="num" id="c-balloon">—</td></tr>
+          <tr><td>Kumulatīvā naudas plūsma līdz 2034</td><td class="num" id="c-cum">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col">
+      <h3>Kumulatīvā naudas plūsma (16 gadi)</h3>
+      <div class="chart-wrap"><canvas id="c-chart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION D: DEBT-EQUITY CONVERSION ============ -->
+<section>
+  <h2>D. Parāda → Kapitāldaļu konversija</h2>
+  <p style="color:var(--muted);font-size:13px;">Modelē scenārijus, kuros viens vai abi kreditori konvertē daļu aizdevuma kapitāldaļās. Tas samazina parādu, bet atšķaida esošo īpašnieku daļu.</p>
+
+  <div class="grid2">
+    <div class="col">
+      <div class="slider-row">
+        <label>Rododendri konversija <span class="val-display" id="d-rod-val">€0</span></label>
+        <input type="range" id="d-rod" min="0" max="182000" step="2000" value="0">
+      </div>
+      <div class="slider-row">
+        <label>SALMO/GV konversija <span class="val-display" id="d-salmo-val">€0</span></label>
+        <input type="range" id="d-salmo" min="0" max="250000" step="2000" value="0">
+      </div>
+      <div class="slider-row">
+        <label>Konversijas diskonts (par cik kapitāldaļa lētāka pret parādu) <span class="val-display" id="d-disc-val">0%</span></label>
+        <input type="range" id="d-disc" min="0" max="70" step="5" value="0">
+      </div>
+      <div class="slider-row">
+        <label>Pēc-konversijas uzņēmuma vērtība (Equity Value) <span class="val-display" id="d-ev-val">€300,000</span></label>
+        <input type="range" id="d-ev" min="50000" max="1200000" step="10000" value="300000">
+        <p class="note">Šī ir vienošanās starp pusēm — Kaspara sarunu pozīcija. Augstāka uzņēmuma vērtība → mazāka īpašnieku atšķaidīšana.</p>
+      </div>
+    </div>
+    <div class="col">
+      <h3>Rezultāts</h3>
+      <table>
+        <tbody>
+          <tr><td>Kopā konvertēts</td><td class="num" id="d-converted">€0</td></tr>
+          <tr><td>Atlikušais parāds</td><td class="num" id="d-remaining">€432,000</td></tr>
+          <tr><td>Konvertēto kapitāldaļu vērtība (ar diskontu)</td><td class="num" id="d-cap-val">€0</td></tr>
+          <tr><td>Jauna esošo īpašnieku daļa (%)</td><td class="num" id="d-existing-pct">100%</td></tr>
+          <tr><td>Rododendri jaunā daļa</td><td class="num" id="d-rod-pct">0%</td></tr>
+          <tr><td>SALMO/GV jaunā daļa</td><td class="num" id="d-salmo-pct">0%</td></tr>
+        </tbody>
+      </table>
+      <div class="chart-wrap" style="height:200px"><canvas id="d-chart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION E: OWNER POSITION ============ -->
+<section>
+  <h2>E. Kaspara pozīcijas vērtējums</h2>
+  <p style="color:var(--muted);font-size:13px;">Atzīmējiet: oficiāli Kaspars Kondratjuks ir vienīgais dalībnieks (Komercreģistra dati). Tomēr neformāli pastāv saistības un norunas ar citām pusēm. Ievadiet faktisko ekonomisko daļu, par kuru notiek sarunas.</p>
+
+  <div class="grid2">
+    <div class="col">
+      <div class="slider-row">
+        <label>Kaspara ekonomiskā daļa pirms sarunām <span class="val-display" id="e-pct-val">100%</span></label>
+        <input type="range" id="e-pct" min="20" max="100" step="1" value="100">
+      </div>
+      <div class="slider-row">
+        <label>Pieņemtais uzņēmuma Equity Value <span class="val-display" id="e-eq-val">€300,000</span></label>
+        <input type="range" id="e-eq" min="0" max="1200000" step="10000" value="300000">
+      </div>
+      <div class="slider-row">
+        <label>Daļa, ko Kaspars pārdod (%) <span class="val-display" id="e-sell-val">0%</span></label>
+        <input type="range" id="e-sell" min="0" max="100" step="1" value="0">
+      </div>
+      <div class="slider-row">
+        <label>Sarūsējis ieņēmumi (jutīguma analīze) <span class="val-display" id="e-sens-val">100%</span></label>
+        <input type="range" id="e-sens" min="50" max="120" step="5" value="100">
+      </div>
+    </div>
+    <div class="col">
+      <h3>Kaspara situācijas analīze</h3>
+      <table>
+        <tbody>
+          <tr><td>Kaspara pirms-sarunu daļas vērtība</td><td class="num" id="e-before">€300,000</td></tr>
+          <tr><td>Cik pārdots (€)</td><td class="num" id="e-cash">€0</td></tr>
+          <tr><td>Atlikusī daļa (%)</td><td class="num" id="e-remain-pct">100%</td></tr>
+          <tr><td>Atlikušās daļas vērtība</td><td class="num" id="e-remain-val">€300,000</td></tr>
+          <tr><td>Kopā (cash + atlikušais)</td><td class="num" id="e-total">€300,000</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Sarunas par daļas pārdošanu jāveic kontekstā ar B sadaļas vērtējuma diapazonu (~€200-700k atkarībā no metodes un pieņēmumiem).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION F: ASSUMPTIONS ============ -->
+<section>
+  <h2>F. Pieņēmumi un brīdinājumi</h2>
+  <div class="result-box warn">
+    <strong>Šis nav formāls neatkarīga vērtētāja ziņojums.</strong> Visi rezultāti ir aprēķini, kas balstīti uz lapā iesniegtajiem pieņēmumiem. Saites uz oficiālajiem datu avotiem:
+  </div>
+  <h3>Galvenie pieņēmumi</h3>
+  <ul style="font-size:14px">
+    <li><strong>Stabils EBITDA:</strong> €59-65k (no <code>KKC_Budget_Scenarios_2026_2041.xlsx</code> Scenario 2)</li>
+    <li><strong>Sarūsējis nomas līgums:</strong> spēkā līdz ~2031-10; pēc tam nav modelēts replacement scenārijs</li>
+    <li><strong>Aizdevumu noteikumi (jaunie):</strong> 92 mēneši, principa atmaksa, procenti balloon perioda beigās (saskaņā ar 2026-05-13 vienošanos)</li>
+    <li><strong>Inflācijas pieņēmumi:</strong> nav iekļauti (KKC, KLKC un Sarūsējis modelis pieņem flat operatīvās izmaksas)</li>
+    <li><strong>Pamatkapitāls:</strong> €53,000 (nepalielinās, ja nav konversijas)</li>
+    <li><strong>Procentu uzkrāšana:</strong> vienkārša, uz neatmaksāto pamatsummas atlikumu (standarta prakse, gaida apstiprinājumu)</li>
+  </ul>
+  <h3>Datu avoti</h3>
+  <ul style="font-size:14px">
+    <li><strong>Oficiāls:</strong> Kultūras centrs_gada pārskats.pdf (2026-03-19)</li>
+    <li><strong>Operatīvā uzskaite:</strong> Bilance 2020-2025.xlsx, PZA 2018-2025.xlsx (eksportēts 2026-01-06)</li>
+    <li><strong>Projekcijas:</strong> KKC_Budget_Scenarios_2026_2041.xlsx (Scenario 2)</li>
+    <li><strong>Ārējais vērtējums:</strong> Finanšu modelis.xlsx (DCF aprēķins, 2024-05)</li>
+    <li><strong>Šaurāka analīze:</strong> SIA_KC_Shareholder_Overview.md (2026-05)</li>
+  </ul>
+</section>
+
+</main>
+
+<script>
+// ====================== DATA ======================
+const DATA = {
+  loans: {
+    rododendri: { principal: 182000, monthly_new: 1978, rate: 0.04 },
+    salmo: { principal: 250000, monthly_new: 2700, rate: 0.04 },
+    offbooks: { principal: 66911, monthly_new: 0, rate: 0 }
+  },
+  totalDebtFormal: 432000,
+  totalDebtAll: 498911,
+  bookEquity: -22376,
+  shareCapital: 53000,
+  ebitdaProjections: { // Scenario 2
+    2026: 49386, 2027: 59263, 2028: 60172, 2029: 61100, 2030: 62047,
+    2031: 63012, 2032: 63996, 2033: 65001, 2034: 66025, 2035: 67070,
+    2036: 68000, 2037: 69000, 2038: 70000, 2039: 71000, 2040: 72000, 2041: 73000
+  },
+  external: { eq1: 1388005, eq2: 616045 }
+};
+
+// ====================== UTILITIES ======================
+const $ = id => document.getElementById(id);
+const fmt = (n, dec = 0) => {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  const sign = n < 0 ? '-' : '';
+  const abs = Math.abs(n);
+  return sign + '€' + abs.toLocaleString('lv-LV', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+};
+const pct = (n, dec = 1) => (n === null || isNaN(n)) ? '—' : (n).toFixed(dec) + '%';
+
+function colorClass(n) { return n >= 0 ? 'pos' : 'neg'; }
+function applyColor(el, n) {
+  el.classList.remove('pos', 'neg');
+  el.classList.add(n >= 0 ? 'pos' : 'neg');
+}
+
+// ====================== SECTION B.1 EBITDA MULTIPLE ======================
+function updateB1() {
+  const ebitda = +$('b1-ebitda').value;
+  const mult = +$('b1-mult').value;
+  const debt = +$('b1-debt').value;
+  $('b1-ebitda-val').textContent = fmt(ebitda);
+  $('b1-mult-val').textContent = mult.toFixed(1) + 'x';
+  $('b1-debt-val').textContent = fmt(debt);
+  const ev = ebitda * mult;
+  const eq = ev - debt;
+  $('b1-ev').textContent = fmt(ev);
+  $('b1-eq').textContent = fmt(eq);
+  applyColor($('b1-eq'), eq);
+  $('b1-result').classList.toggle('neg', eq < 0);
+  updateB4();
+}
+['b1-ebitda', 'b1-mult', 'b1-debt'].forEach(id => $(id).addEventListener('input', updateB1));
+
+// ====================== SECTION B.2 DCF ======================
+function calculateDCF() {
+  const disc = +$('b2-disc').value / 100;
+  const grow = +$('b2-grow').value / 100;
+  const renew = +$('b2-renew').value / 100;
+  let dcf = 0;
+  const years = Object.keys(DATA.ebitdaProjections).map(Number).sort();
+  for (const y of years) {
+    const i = y - 2025; // discount period
+    let cf = DATA.ebitdaProjections[y];
+    if (y > 2031) cf *= renew; // probability-weighted post-Sarūsējis renewal
+    dcf += cf / Math.pow(1 + disc, i);
+  }
+  // Terminal value: capitalize last year's CF at (disc - grow)
+  const lastYearCF = DATA.ebitdaProjections[2041] * renew;
+  const tv = lastYearCF * (1 + grow) / Math.max(disc - grow, 0.005);
+  const tvDisc = tv / Math.pow(1 + disc, 2041 - 2025);
+  const ev = dcf + tvDisc;
+  const eq = ev - DATA.totalDebtFormal;
+  return { dcf, tvDisc, ev, eq };
+}
+function updateB2() {
+  const disc = +$('b2-disc').value;
+  const grow = +$('b2-grow').value;
+  const renew = +$('b2-renew').value;
+  $('b2-disc-val').textContent = disc.toFixed(1) + '%';
+  $('b2-grow-val').textContent = grow.toFixed(1) + '%';
+  $('b2-renew-val').textContent = renew + '%';
+  const r = calculateDCF();
+  $('b2-dcf').textContent = fmt(r.dcf);
+  $('b2-tv').textContent = fmt(r.tvDisc);
+  $('b2-ev').textContent = fmt(r.ev);
+  $('b2-eq').textContent = fmt(r.eq);
+  applyColor($('b2-eq'), r.eq);
+  $('b2-result').classList.toggle('neg', r.eq < 0);
+  updateB4();
+}
+['b2-disc', 'b2-grow', 'b2-renew'].forEach(id => $(id).addEventListener('input', updateB2));
+
+// ====================== SECTION B.3 NAV ======================
+function updateB3() {
+  const fv = +$('b3-fv').value / 100;
+  $('b3-fv-val').textContent = (fv * 100).toFixed(0) + '%';
+  const adjAssets = 443497 - 405711 + (405711 * fv);
+  const liab = 431711 + 34162; // total liabilities
+  const nav = adjAssets - liab;
+  $('b3-assets').textContent = fmt(adjAssets);
+  $('b3-nav').textContent = fmt(nav);
+  applyColor($('b3-nav'), nav);
+  $('b3-result').classList.toggle('neg', nav < 0);
+  updateB4();
+}
+$('b3-fv').addEventListener('input', updateB3);
+
+// ====================== SECTION B.4 SUMMARY ======================
+let b4Chart = null;
+function updateB4() {
+  const b1 = (+$('b1-ebitda').value) * (+$('b1-mult').value) - (+$('b1-debt').value);
+  const r2 = calculateDCF(); const b2 = r2.eq;
+  const fv = +$('b3-fv').value / 100;
+  const b3 = (443497 - 405711 + 405711 * fv) - (431711 + 34162);
+  const avg = (b1 + b2 + b3) / 3;
+  $('b4-b1').textContent = fmt(b1);
+  $('b4-b2').textContent = fmt(b2);
+  $('b4-b3').textContent = fmt(b3);
+  $('b4-avg').innerHTML = '<strong>' + fmt(avg) + '</strong>';
+  applyColor($('b4-b1'), b1);
+  applyColor($('b4-b2'), b2);
+  applyColor($('b4-b3'), b3);
+
+  if (b4Chart) b4Chart.destroy();
+  const ctx = $('b4-chart').getContext('2d');
+  b4Chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['EBITDA×Mult', 'DCF', 'NAV', 'Ārējais (it.2)', 'Ārējais (it.1)'],
+      datasets: [{
+        label: 'Equity Value',
+        data: [b1, b2, b3, DATA.external.eq2, DATA.external.eq1],
+        backgroundColor: [b1, b2, b3, DATA.external.eq2, DATA.external.eq1].map(v => v >= 0 ? '#2d7a3d' : '#b03030')
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => '€' + (v/1000).toFixed(0) + 'k' } } }
+    }
+  });
+}
+
+// ====================== SECTION C: LOAN SCENARIOS ======================
+let cChart = null;
+function getLoanScenario() {
+  const radios = document.querySelectorAll('input[name="c-scenario"]');
+  for (const r of radios) if (r.checked) return r.value;
+  return 'new';
+}
+function calculateLoanScenario() {
+  const sc = getLoanScenario();
+  const rate = +$('c-rate').value / 100;
+  const ebitda = +$('c-ebitda').value;
+  let term, monthlyPrincipal, monthlyInterest, totalInterest, balloon, endYear;
+  const totalP = DATA.loans.rododendri.principal + DATA.loans.salmo.principal;
+  if (sc === 'new') {
+    term = 92;
+    monthlyPrincipal = totalP / term;
+    // Simple interest on outstanding balance
+    // Sum of yearly outstanding balances (months/12) * rate
+    let totalAccruedInterest = 0;
+    let outstanding = totalP;
+    for (let m = 1; m <= term; m++) {
+      totalAccruedInterest += outstanding * rate / 12;
+      outstanding -= monthlyPrincipal;
+    }
+    monthlyInterest = 0; // not paid monthly
+    totalInterest = totalAccruedInterest;
+    balloon = totalAccruedInterest;
+    endYear = 2026 + Math.floor(term / 12);
+  } else {
+    const termMap = { old60: 60, ext96: 96, ext120: 120 };
+    term = termMap[sc];
+    // Classic amortization: equal monthly payment
+    const monthRate = rate / 12;
+    const monthlyPmt = totalP * monthRate / (1 - Math.pow(1 + monthRate, -term));
+    monthlyPrincipal = monthlyPmt; // (combined; ratio shifts but we just show total)
+    let totalI = 0;
+    let outstanding = totalP;
+    for (let m = 1; m <= term; m++) {
+      const i = outstanding * monthRate;
+      const p = monthlyPmt - i;
+      totalI += i;
+      outstanding -= p;
+    }
+    monthlyInterest = 0; // included in monthlyPmt
+    totalInterest = totalI;
+    balloon = 0;
+    endYear = 2026 + Math.floor(term / 12);
+  }
+  const monthlyCash = sc === 'new' ? monthlyPrincipal : monthlyPrincipal; // monthly cash outflow
+  const yearlyCash = monthlyCash * 12;
+  const dscr = ebitda / yearlyCash;
+
+  // Cumulative cash flow over 16 years
+  const years = [];
+  const cumCash = [];
+  let cum = 0;
+  for (let y = 2026; y <= 2041; y++) {
+    const ebitdaY = DATA.ebitdaProjections[y] || 70000;
+    const debtServiceY = (y < endYear) ? yearlyCash : 0;
+    // Balloon in year endYear
+    const balloonY = (y === endYear && sc === 'new') ? balloon : 0;
+    const netY = ebitdaY - debtServiceY - balloonY;
+    cum += netY;
+    years.push(y);
+    cumCash.push(cum);
+  }
+  return { sc, term, monthlyCash, yearlyCash, dscr, totalInterest, balloon, endYear, years, cumCash };
+}
+
+function updateC() {
+  const r = calculateLoanScenario();
+  $('c-rate-val').textContent = (+$('c-rate').value).toFixed(1) + '%';
+  $('c-ebitda-val').textContent = fmt(+$('c-ebitda').value);
+  $('c-monthly').textContent = fmt(r.monthlyCash, 0);
+  $('c-yearly').textContent = fmt(r.yearlyCash, 0);
+  $('c-dscr').textContent = r.dscr.toFixed(2) + 'x';
+  $('c-dscr').classList.toggle('neg', r.dscr < 1);
+  $('c-dscr').classList.toggle('pos', r.dscr >= 1.2);
+  $('c-end').textContent = r.endYear;
+  $('c-interest').textContent = fmt(r.totalInterest, 0);
+  $('c-balloon').textContent = fmt(r.balloon, 0);
+  const cum2034 = r.cumCash[r.years.indexOf(2034)];
+  $('c-cum').textContent = fmt(cum2034, 0);
+  applyColor($('c-cum'), cum2034);
+
+  // Chart
+  if (cChart) cChart.destroy();
+  const ctx = $('c-chart').getContext('2d');
+  cChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: r.years,
+      datasets: [{
+        label: 'Kumulatīvā nauda (€)',
+        data: r.cumCash,
+        borderColor: '#2c5f8d',
+        backgroundColor: 'rgba(44,95,141,0.1)',
+        fill: true,
+        tension: 0.2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => '€' + (v/1000).toFixed(0) + 'k' } } }
+    }
+  });
+}
+document.querySelectorAll('input[name="c-scenario"]').forEach(r => r.addEventListener('change', updateC));
+['c-rate', 'c-ebitda'].forEach(id => $(id).addEventListener('input', updateC));
+
+// ====================== SECTION D: CONVERSION ======================
+let dChart = null;
+function updateD() {
+  const rod = +$('d-rod').value;
+  const salmo = +$('d-salmo').value;
+  const disc = +$('d-disc').value / 100;
+  const ev = +$('d-ev').value;
+  $('d-rod-val').textContent = fmt(rod);
+  $('d-salmo-val').textContent = fmt(salmo);
+  $('d-disc-val').textContent = (disc * 100).toFixed(0) + '%';
+  $('d-ev-val').textContent = fmt(ev);
+
+  const totalConv = rod + salmo;
+  const valOfConv = totalConv * (1 - disc); // creditor receives equity worth this in market terms
+  const remaining = DATA.totalDebtFormal - totalConv;
+
+  // Existing owner had equity value `ev`
+  // Creditors receive equity worth `valOfConv`
+  // New total equity value = ev + valOfConv
+  const newTotalEquity = ev + valOfConv;
+  const existingPct = newTotalEquity > 0 ? (ev / newTotalEquity) * 100 : 100;
+  const rodPct = newTotalEquity > 0 ? (rod * (1 - disc) / newTotalEquity) * 100 : 0;
+  const salmoPct = newTotalEquity > 0 ? (salmo * (1 - disc) / newTotalEquity) * 100 : 0;
+
+  $('d-converted').textContent = fmt(totalConv);
+  $('d-remaining').textContent = fmt(remaining);
+  $('d-cap-val').textContent = fmt(valOfConv);
+  $('d-existing-pct').textContent = existingPct.toFixed(1) + '%';
+  $('d-rod-pct').textContent = rodPct.toFixed(1) + '%';
+  $('d-salmo-pct').textContent = salmoPct.toFixed(1) + '%';
+
+  if (dChart) dChart.destroy();
+  const ctx = $('d-chart').getContext('2d');
+  dChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Esošie īpašnieki', 'Rododendri', 'SALMO/GV'],
+      datasets: [{
+        data: [existingPct, rodPct, salmoPct],
+        backgroundColor: ['#2c5f8d', '#b87a00', '#2d7a3d']
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }
+    }
+  });
+}
+['d-rod', 'd-salmo', 'd-disc', 'd-ev'].forEach(id => $(id).addEventListener('input', updateD));
+
+// ====================== SECTION E: OWNER POSITION ======================
+function updateE() {
+  const pct = +$('e-pct').value / 100;
+  const eq = +$('e-eq').value;
+  const sell = +$('e-sell').value / 100;
+  const sens = +$('e-sens').value / 100;
+  $('e-pct-val').textContent = (pct * 100).toFixed(0) + '%';
+  $('e-eq-val').textContent = fmt(eq);
+  $('e-sell-val').textContent = (sell * 100).toFixed(0) + '%';
+  $('e-sens-val').textContent = (sens * 100).toFixed(0) + '%';
+
+  const adjEq = eq * sens; // sensitivity adj
+  const before = adjEq * pct;
+  const cash = before * sell;
+  const remainPct = pct * (1 - sell);
+  const remainVal = adjEq * remainPct;
+  const total = cash + remainVal;
+  $('e-before').textContent = fmt(before);
+  $('e-cash').textContent = fmt(cash);
+  $('e-remain-pct').textContent = (remainPct * 100).toFixed(1) + '%';
+  $('e-remain-val').textContent = fmt(remainVal);
+  $('e-total').textContent = fmt(total);
+}
+['e-pct', 'e-eq', 'e-sell', 'e-sens'].forEach(id => $(id).addEventListener('input', updateE));
+
+// ====================== INIT ======================
+updateB1(); updateB2(); updateB3(); updateC(); updateD(); updateE();
+</script>
+
+</body>
+</html>

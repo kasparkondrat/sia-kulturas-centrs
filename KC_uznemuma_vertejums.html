@@ -895,9 +895,9 @@ function updateD() {
   $('d-salmo-pct').textContent = salmoPct.toFixed(1) + '%';
   // Per-person breakdown
   const sh = DATA.shareholders;
-  $('d-kaneps-pct').textContent  = (sh.kaneps.pct  * existingPct / 100).toFixed(1) + '%';
-  $('d-kaspars-pct').textContent = (sh.kondratjuks.pct * existingPct / 100).toFixed(1) + '%';
-  $('d-krolls-pct').textContent  = (sh.krolls.pct  * existingPct / 100).toFixed(1) + '%';
+  $('d-kaneps-pct').textContent  = (sh.kaneps.pct  * existingPct).toFixed(1) + '%';
+  $('d-kaspars-pct').textContent = (sh.kondratjuks.pct * existingPct).toFixed(1) + '%';
+  $('d-krolls-pct').textContent  = (sh.krolls.pct  * existingPct).toFixed(1) + '%';
 
   if (dChart) dChart.destroy();
   const ctx = $('d-chart').getContext('2d');

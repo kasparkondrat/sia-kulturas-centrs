@@ -355,7 +355,8 @@
           <tr><td>B.1 EBITDA multiple</td><td class="num" id="b4-b1">—</td></tr>
           <tr><td>B.2 DCF</td><td class="num" id="b4-b2">—</td></tr>
           <tr><td>B.3 NAV</td><td class="num" id="b4-b3">—</td></tr>
-          <tr style="background:#f8f7f0"><td><strong>Vidējais</strong></td><td class="num" id="b4-avg"><strong>—</strong></td></tr>
+          <tr style="background:#f8f7f0"><td><strong>Vidējais (B.1-B.3)</strong></td><td class="num" id="b4-avg"><strong>—</strong></td></tr>
+          <tr style="border-top:2px solid var(--border)"><td style="color:var(--muted)">Vēsturiskais vienošanās vidējais <span style="font-size:11px">(apgr. €657k / peļņa €135k / vienošanās €700k)</span></td><td class="num" style="color:var(--muted)">€497,605</td></tr>
         </tbody>
       </table>
       <div class="chart-wrap" style="height:200px"><canvas id="b4-chart"></canvas></div>
@@ -439,9 +440,13 @@
           <tr><td>Kopā konvertēts</td><td class="num" id="d-converted">€0</td></tr>
           <tr><td>Atlikušais parāds</td><td class="num" id="d-remaining">€432,000</td></tr>
           <tr><td>Konvertēto kapitāldaļu vērtība (ar diskontu)</td><td class="num" id="d-cap-val">€0</td></tr>
-          <tr><td>Jauna esošo īpašnieku daļa (%)</td><td class="num" id="d-existing-pct">100%</td></tr>
-          <tr><td>Rododendri jaunā daļa</td><td class="num" id="d-rod-pct">0%</td></tr>
-          <tr><td>SALMO/GV jaunā daļa</td><td class="num" id="d-salmo-pct">0%</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td><strong>Jaunās kapitāldaļu proporcijas</strong></td><td></td></tr>
+          <tr><td style="padding-left:16px">Dāvis Kaņepe (38.33% no esošajiem)</td><td class="num" id="d-kaneps-pct">38.3%</td></tr>
+          <tr style="background:#f0f4f8"><td style="padding-left:16px"><strong>Kaspars Kondratjuks (33.34%)</strong></td><td class="num" id="d-kaspars-pct"><strong>33.3%</strong></td></tr>
+          <tr><td style="padding-left:16px">Kristaps Krolls (28.33% no esošajiem)</td><td class="num" id="d-krolls-pct">28.3%</td></tr>
+          <tr><td style="padding-left:16px">Rododendri jaunā daļa</td><td class="num" id="d-rod-pct">0%</td></tr>
+          <tr><td style="padding-left:16px">SALMO/GV jaunā daļa</td><td class="num" id="d-salmo-pct">0%</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td>Esošo īpašnieku kopā</td><td class="num" id="d-existing-pct">100%</td></tr>
         </tbody>
       </table>
       <div class="chart-wrap" style="height:200px"><canvas id="d-chart"></canvas></div>
@@ -449,44 +454,123 @@
   </div>
 </section>
 
-<!-- ============ SECTION E: OWNER POSITION ============ -->
+<!-- ============ SECTION E: EXIT SCENARIOS ============ -->
 <section>
-  <h2>E. Kaspara pozīcijas vērtējums</h2>
-  <p style="color:var(--muted);font-size:13px;">Atzīmējiet: oficiāli Kaspars Kondratjuks ir vienīgais dalībnieks (Komercreģistra dati). Tomēr neformāli pastāv saistības un norunas ar citām pusēm. Ievadiet faktisko ekonomisko daļu, par kuru notiek sarunas.</p>
+  <h2>E. Kaspara iziešanas scenāriji</h2>
+  <p style="color:var(--muted);font-size:13px;">Kaspars Kondratjuks ir vienīgais <em>juridiskais</em> dalībnieks, bet tur kapitāldaļas arī Dāvja Kaņepes un Kristapa Krolls vārdā atbilstoši iepriekšējai vienošanās. Rīks modelē 3 iziešanas ceļus — vadoties no Kaspara mērķa summas.</p>
 
-  <div class="grid2">
+  <!-- Cap table + shared sliders -->
+  <div class="grid2" style="margin-bottom:20px">
     <div class="col">
-      <div class="slider-row">
-        <label>Kaspara ekonomiskā daļa pirms sarunām <span class="val-display" id="e-pct-val">100%</span></label>
-        <input type="range" id="e-pct" min="20" max="100" step="1" value="100">
-      </div>
-      <div class="slider-row">
-        <label>Pieņemtais uzņēmuma Equity Value <span class="val-display" id="e-eq-val">€300,000</span></label>
-        <input type="range" id="e-eq" min="0" max="1200000" step="10000" value="300000">
-      </div>
-      <div class="slider-row">
-        <label>Daļa, ko Kaspars pārdod (%) <span class="val-display" id="e-sell-val">0%</span></label>
-        <input type="range" id="e-sell" min="0" max="100" step="1" value="0">
-      </div>
-      <div class="slider-row">
-        <label>Sarūsējis ieņēmumi (jutīguma analīze) <span class="val-display" id="e-sens-val">100%</span></label>
-        <input type="range" id="e-sens" min="50" max="120" step="5" value="100">
-      </div>
-    </div>
-    <div class="col">
-      <h3>Kaspara situācijas analīze</h3>
+      <h3>Kapitāla daļu struktūra (ekonomiskā)</h3>
       <table>
+        <thead><tr><th>Īpašnieks</th><th class="num">%</th><th class="num">Vērtība pie EV</th></tr></thead>
         <tbody>
-          <tr><td>Kaspara pirms-sarunu daļas vērtība</td><td class="num" id="e-before">€300,000</td></tr>
-          <tr><td>Cik pārdots (€)</td><td class="num" id="e-cash">€0</td></tr>
-          <tr><td>Atlikusī daļa (%)</td><td class="num" id="e-remain-pct">100%</td></tr>
-          <tr><td>Atlikušās daļas vērtība</td><td class="num" id="e-remain-val">€300,000</td></tr>
-          <tr><td>Kopā (cash + atlikušais)</td><td class="num" id="e-total">€300,000</td></tr>
+          <tr><td>Dāvis Kaņepe</td><td class="num">38.33%</td><td class="num" id="e-cap-kaneps">—</td></tr>
+          <tr style="background:#f0f4f8;font-weight:600"><td>Kaspars Kondratjuks</td><td class="num">33.34%</td><td class="num" id="e-cap-kaspars">—</td></tr>
+          <tr><td>Kristaps Krolls</td><td class="num">28.33%</td><td class="num" id="e-cap-krolls">—</td></tr>
         </tbody>
       </table>
-      <p class="note">Sarunas par daļas pārdošanu jāveic kontekstā ar B sadaļas vērtējuma diapazonu (~€200-700k atkarībā no metodes un pieņēmumiem).</p>
+      <p class="note">Equity Value = Enterprise Value mīnus neto parāds. Pie zema EV pašu kapitāls var būt negatīvs.</p>
+    </div>
+    <div class="col">
+      <div class="slider-row">
+        <label>Uzņēmuma Equity Value (kopējais) <span class="val-display" id="e-ev-val">€300,000</span></label>
+        <input type="range" id="e-ev" min="0" max="1200000" step="10000" value="300000">
+      </div>
+      <div class="slider-row">
+        <label>Kaspara "labā iziešana" — minimālā summa cash <span class="val-display" id="e-target-val">€100,000</span></label>
+        <input type="range" id="e-target" min="0" max="300000" step="5000" value="100000">
+      </div>
+      <div id="e-ev-context" style="margin-top:10px;font-size:13px;padding:8px 12px;border-radius:5px;background:var(--accent-light)">
+        Kaspara daļas vērtība: <strong id="e-kaspars-stake">—</strong>
+      </div>
     </div>
   </div>
+
+  <!-- 3 scenario blocks -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px">
+
+    <!-- S1: Share sale -->
+    <div class="panel" id="e-s1-panel">
+      <h3 style="margin-top:0">1. Pārdošana tagad</h3>
+      <p style="font-size:12px;color:var(--muted);margin:0 0 10px">Kaspars pārdod % no sava 33.34% citam pircējam (ārējs investors, Dāvis vai Kristaps)</p>
+      <div class="slider-row">
+        <label>% no Kaspara daļas, ko pārdot <span class="val-display" id="e-s1-sell-val">50%</span></label>
+        <input type="range" id="e-s1-sell" min="0" max="100" step="5" value="50">
+      </div>
+      <table style="margin-top:8px">
+        <tbody>
+          <tr><td>Cash saņemts</td><td class="num" id="e-s1-cash">—</td></tr>
+          <tr><td>Atlikusī daļa</td><td class="num" id="e-s1-remain-pct">—</td></tr>
+          <tr><td>Atlikušās daļas vērtība</td><td class="num" id="e-s1-remain-val">—</td></tr>
+        </tbody>
+      </table>
+      <div id="e-s1-verdict" style="margin-top:10px;padding:8px 12px;border-radius:5px;font-size:13px;font-weight:600;text-align:center">—</div>
+    </div>
+
+    <!-- S2: Passive + distributions -->
+    <div class="panel" id="e-s2-panel">
+      <h3 style="margin-top:0">2. Pasīvais dalībnieks + sadales</h3>
+      <p style="font-size:12px;color:var(--muted);margin:0 0 10px">Kaspars paliek, saņem 33.34% no KC brīvās naudas plūsmas pēc 2034 (aizdevumu atmaksas beigām)</p>
+      <div class="slider-row">
+        <label>Sadaļu gadi pēc 2034 <span class="val-display" id="e-s2-years-val">5 g.</span></label>
+        <input type="range" id="e-s2-years" min="1" max="10" step="1" value="5">
+      </div>
+      <div class="slider-row">
+        <label>% no daļas, ko patur <span class="val-display" id="e-s2-keep-val">100%</span></label>
+        <input type="range" id="e-s2-keep" min="10" max="100" step="5" value="100">
+      </div>
+      <table style="margin-top:8px">
+        <tbody>
+          <tr><td>Gada sadale Kasparam</td><td class="num" id="e-s2-annual">—</td></tr>
+          <tr><td>Kumulatīvās sadales</td><td class="num" id="e-s2-cum">—</td></tr>
+          <tr><td>Pirmā sadale ~gads</td><td class="num">2034–2035</td></tr>
+        </tbody>
+      </table>
+      <div id="e-s2-verdict" style="margin-top:10px;padding:8px 12px;border-radius:5px;font-size:13px;font-weight:600;text-align:center">—</div>
+    </div>
+
+    <!-- S3: Creditor converts + exit -->
+    <div class="panel" id="e-s3-panel">
+      <h3 style="margin-top:0">3. Kreditors konvertē + Kaspars iziet</h3>
+      <p style="font-size:12px;color:var(--muted);margin:0 0 10px">Konversijas darījumā kreditors iegūst daļas, Kaspars vienlaicīgi pārdod savu daļu augstāk vērtētā uzņēmumā (zemāks parāds → augstāks EV)</p>
+      <div class="slider-row">
+        <label>Konvertē Rododendri <span class="val-display" id="e-s3-rod-val">€0</span></label>
+        <input type="range" id="e-s3-rod" min="0" max="182000" step="10000" value="0">
+      </div>
+      <div class="slider-row">
+        <label>Konvertē SALMO/GV <span class="val-display" id="e-s3-salmo-val">€0</span></label>
+        <input type="range" id="e-s3-salmo" min="0" max="250000" step="10000" value="0">
+      </div>
+      <div class="slider-row">
+        <label>Kaspars pārdod % no savas daļas <span class="val-display" id="e-s3-sell-val">100%</span></label>
+        <input type="range" id="e-s3-sell" min="0" max="100" step="5" value="100">
+      </div>
+      <table style="margin-top:8px">
+        <tbody>
+          <tr><td>Post-konversijas EV</td><td class="num" id="e-s3-new-ev">—</td></tr>
+          <tr><td>Kaspara daļa pēc dilution</td><td class="num" id="e-s3-kaspars-pct">—</td></tr>
+          <tr><td>Cash saņemts</td><td class="num" id="e-s3-cash">—</td></tr>
+        </tbody>
+      </table>
+      <div id="e-s3-verdict" style="margin-top:10px;padding:8px 12px;border-radius:5px;font-size:13px;font-weight:600;text-align:center">—</div>
+    </div>
+  </div>
+
+  <!-- Comparison table -->
+  <h3>Scenāriju salīdzinājums</h3>
+  <table>
+    <thead>
+      <tr><th>Scenārijs</th><th class="num">Kaspara cash</th><th class="num">Atlikusī vērtība</th><th class="num">Kopā</th><th style="text-align:center">≥ mērķis?</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1. Pārdošana tagad</td><td class="num" id="e-cmp-s1-cash">—</td><td class="num" id="e-cmp-s1-remain">—</td><td class="num" id="e-cmp-s1-total">—</td><td style="text-align:center" id="e-cmp-s1-ok">—</td></tr>
+      <tr><td>2. Pasīvs + sadales</td><td class="num" id="e-cmp-s2-cash">—</td><td class="num" id="e-cmp-s2-remain">—</td><td class="num" id="e-cmp-s2-total">—</td><td style="text-align:center" id="e-cmp-s2-ok">—</td></tr>
+      <tr><td>3. Konversija + exit</td><td class="num" id="e-cmp-s3-cash">—</td><td class="num" id="e-cmp-s3-remain">—</td><td class="num" id="e-cmp-s3-total">—</td><td style="text-align:center" id="e-cmp-s3-ok">—</td></tr>
+    </tbody>
+  </table>
+  <p class="note">Mērķis = "labā iziešana" slīderis augstāk. Vērtības tiek rēķinātas uz cash saņemto summu (nevis atlikušo daļu, kurai nav tirgus likviditātes). Pasīvā scenārijā "cash" = kumulatīvās sadales.</p>
 </section>
 
 <!-- ============ SECTION F: ASSUMPTIONS ============ -->
@@ -533,7 +617,15 @@ const DATA = {
     2031: 63012, 2032: 63996, 2033: 65001, 2034: 66025, 2035: 67070,
     2036: 68000, 2037: 69000, 2038: 70000, 2039: 71000, 2040: 72000, 2041: 73000
   },
-  external: { eq1: 1388005, eq2: 616045 }
+  external: { eq1: 1388005, eq2: 616045 },
+  shareholders: {
+    kaneps:     { name: "Dāvis Kaņepe",        pct: 0.3833 },
+    kondratjuks:{ name: "Kaspars Kondratjuks", pct: 0.3334 },
+    krolls:     { name: "Kristaps Krolls",     pct: 0.2833 }
+  },
+  historicalValuation: {
+    byTurnover: 657600, byProfit: 135216, byAgreement: 700000, agreedAverage: 497605
+  }
 };
 
 // ====================== UTILITIES ======================
@@ -801,16 +893,26 @@ function updateD() {
   $('d-existing-pct').textContent = existingPct.toFixed(1) + '%';
   $('d-rod-pct').textContent = rodPct.toFixed(1) + '%';
   $('d-salmo-pct').textContent = salmoPct.toFixed(1) + '%';
+  // Per-person breakdown
+  const sh = DATA.shareholders;
+  $('d-kaneps-pct').textContent  = (sh.kaneps.pct  * existingPct / 100).toFixed(1) + '%';
+  $('d-kaspars-pct').textContent = (sh.kondratjuks.pct * existingPct / 100).toFixed(1) + '%';
+  $('d-krolls-pct').textContent  = (sh.krolls.pct  * existingPct / 100).toFixed(1) + '%';
 
   if (dChart) dChart.destroy();
   const ctx = $('d-chart').getContext('2d');
   dChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Esošie īpašnieki', 'Rododendri', 'SALMO/GV'],
+      labels: ['D. Kaņepe', 'K. Kondratjuks', 'K. Krolls', 'Rododendri', 'SALMO/GV'],
       datasets: [{
-        data: [existingPct, rodPct, salmoPct],
-        backgroundColor: ['#2c5f8d', '#b87a00', '#2d7a3d']
+        data: [
+          sh.kaneps.pct  * existingPct / 100,
+          sh.kondratjuks.pct * existingPct / 100,
+          sh.krolls.pct  * existingPct / 100,
+          rodPct, salmoPct
+        ],
+        backgroundColor: ['#4a90c4', '#2c5f8d', '#1a3d5c', '#b87a00', '#2d7a3d']
       }]
     },
     options: {
@@ -821,33 +923,105 @@ function updateD() {
 }
 ['d-rod', 'd-salmo', 'd-disc', 'd-ev'].forEach(id => $(id).addEventListener('input', updateD));
 
-// ====================== SECTION E: OWNER POSITION ======================
-function updateE() {
-  const pct = +$('e-pct').value / 100;
-  const eq = +$('e-eq').value;
-  const sell = +$('e-sell').value / 100;
-  const sens = +$('e-sens').value / 100;
-  $('e-pct-val').textContent = (pct * 100).toFixed(0) + '%';
-  $('e-eq-val').textContent = fmt(eq);
-  $('e-sell-val').textContent = (sell * 100).toFixed(0) + '%';
-  $('e-sens-val').textContent = (sens * 100).toFixed(0) + '%';
-
-  const adjEq = eq * sens; // sensitivity adj
-  const before = adjEq * pct;
-  const cash = before * sell;
-  const remainPct = pct * (1 - sell);
-  const remainVal = adjEq * remainPct;
-  const total = cash + remainVal;
-  $('e-before').textContent = fmt(before);
-  $('e-cash').textContent = fmt(cash);
-  $('e-remain-pct').textContent = (remainPct * 100).toFixed(1) + '%';
-  $('e-remain-val').textContent = fmt(remainVal);
-  $('e-total').textContent = fmt(total);
+// ====================== SECTION E: EXIT SCENARIOS ======================
+function verdictBox(el, cash, target) {
+  const ok = cash >= target && target > 0;
+  const neutral = target === 0;
+  el.textContent = neutral ? '— (mērķis nav iestatīts)' : (ok ? '✓ Sasniedz mērķi' : '✗ Zemāk par mērķi');
+  el.style.background = neutral ? '#f5f5f0' : (ok ? 'var(--bg-pos)' : 'var(--bg-neg)');
+  el.style.color = neutral ? 'var(--muted)' : (ok ? 'var(--pos)' : 'var(--neg)');
 }
-['e-pct', 'e-eq', 'e-sell', 'e-sens'].forEach(id => $(id).addEventListener('input', updateE));
+
+function updateE() {
+  const ev = +$('e-ev').value;
+  const target = +$('e-target').value;
+  const sh = DATA.shareholders;
+  const kPct = sh.kondratjuks.pct; // 0.3334
+
+  $('e-ev-val').textContent = fmt(ev);
+  $('e-target-val').textContent = fmt(target);
+
+  // Cap table values
+  $('e-cap-kaneps').textContent  = fmt(ev * sh.kaneps.pct);
+  $('e-cap-kaspars').textContent = fmt(ev * kPct);
+  $('e-cap-krolls').textContent  = fmt(ev * sh.krolls.pct);
+  const kStake = ev * kPct;
+  $('e-kaspars-stake').textContent = fmt(kStake) + ' (' + (kStake >= 0 ? '' : '') + (kPct * 100).toFixed(2) + '% no €' + (ev/1000).toFixed(0) + 'k EV)';
+  $('e-ev-context').style.background = kStake >= 0 ? 'var(--accent-light)' : 'var(--bg-neg)';
+
+  // ---- Scenario 1: Share sale ----
+  const s1SellPct = +$('e-s1-sell').value / 100;
+  $('e-s1-sell-val').textContent = (s1SellPct * 100).toFixed(0) + '%';
+  const s1Cash = kStake * s1SellPct;
+  const s1RemainPct = kPct * (1 - s1SellPct);
+  const s1RemainVal = ev * s1RemainPct;
+  $('e-s1-cash').textContent = fmt(s1Cash);
+  $('e-s1-remain-pct').textContent = (s1RemainPct * 100).toFixed(2) + '%';
+  $('e-s1-remain-val').textContent = fmt(s1RemainVal);
+  verdictBox($('e-s1-verdict'), s1Cash, target);
+
+  // ---- Scenario 2: Passive + distributions ----
+  const s2Years = +$('e-s2-years').value;
+  const s2Keep = +$('e-s2-keep').value / 100;
+  $('e-s2-years-val').textContent = s2Years + ' g.';
+  $('e-s2-keep-val').textContent = ($('e-s2-keep').value) + '%';
+  // Average free cash flow post-2034: ~€65-72k; use EBITDA projection avg 2034-2041
+  const postLoanEbitda = [66025, 67070, 68000, 69000, 70000, 71000, 72000, 73000];
+  const avgFCF = postLoanEbitda.slice(0, s2Years).reduce((a,b) => a + b, 0) / Math.min(s2Years, postLoanEbitda.length);
+  const s2Annual = avgFCF * kPct * s2Keep;
+  const s2Cum = s2Annual * s2Years;
+  $('e-s2-annual').textContent = fmt(s2Annual);
+  $('e-s2-cum').textContent = fmt(s2Cum);
+  verdictBox($('e-s2-verdict'), s2Cum, target);
+
+  // ---- Scenario 3: Creditor converts + exit ----
+  const s3Rod = +$('e-s3-rod').value;
+  const s3Salmo = +$('e-s3-salmo').value;
+  const s3SellPct = +$('e-s3-sell').value / 100;
+  $('e-s3-rod-val').textContent = fmt(s3Rod);
+  $('e-s3-salmo-val').textContent = fmt(s3Salmo);
+  $('e-s3-sell-val').textContent = ($('e-s3-sell').value) + '%';
+  // Post-conversion: debt decreases → EV increases by the same amount (no discount assumed at EV level)
+  const s3NewEV = ev + s3Rod + s3Salmo;
+  // Creditors receive equity at face value → dilution
+  const totalConv = s3Rod + s3Salmo;
+  const creditorNewPct = s3NewEV > 0 ? totalConv / s3NewEV : 0;
+  const kPctPostConv = kPct * (1 - creditorNewPct);
+  const s3KStake = s3NewEV * kPctPostConv;
+  const s3Cash = s3KStake * s3SellPct;
+  $('e-s3-new-ev').textContent = fmt(s3NewEV);
+  $('e-s3-kaspars-pct').textContent = (kPctPostConv * 100).toFixed(2) + '%';
+  $('e-s3-cash').textContent = fmt(s3Cash);
+  verdictBox($('e-s3-verdict'), s3Cash, target);
+
+  // ---- Comparison table ----
+  $('e-cmp-s1-cash').textContent = fmt(s1Cash);
+  $('e-cmp-s1-remain').textContent = fmt(s1RemainVal);
+  const s1Total = s1Cash + s1RemainVal;
+  $('e-cmp-s1-total').textContent = fmt(s1Total);
+  const ok = (cash, t) => t === 0 ? '—' : cash >= t ? '✓' : '✗';
+  $('e-cmp-s1-ok').textContent = ok(s1Cash, target);
+  $('e-cmp-s1-ok').style.color = target > 0 ? (s1Cash >= target ? 'var(--pos)' : 'var(--neg)') : '';
+
+  $('e-cmp-s2-cash').textContent = fmt(s2Cum);
+  const s2RemainVal = ev * kPct * s2Keep;
+  $('e-cmp-s2-remain').textContent = fmt(s2RemainVal);
+  $('e-cmp-s2-total').textContent = fmt(s2Cum + s2RemainVal);
+  $('e-cmp-s2-ok').textContent = ok(s2Cum, target);
+  $('e-cmp-s2-ok').style.color = target > 0 ? (s2Cum >= target ? 'var(--pos)' : 'var(--neg)') : '';
+
+  const s3RemainPct = kPctPostConv * (1 - s3SellPct);
+  $('e-cmp-s3-cash').textContent = fmt(s3Cash);
+  $('e-cmp-s3-remain').textContent = fmt(s3NewEV * s3RemainPct);
+  $('e-cmp-s3-total').textContent = fmt(s3Cash + s3NewEV * s3RemainPct);
+  $('e-cmp-s3-ok').textContent = ok(s3Cash, target);
+  $('e-cmp-s3-ok').style.color = target > 0 ? (s3Cash >= target ? 'var(--pos)' : 'var(--neg)') : '';
+}
+['e-ev','e-target','e-s1-sell','e-s2-years','e-s2-keep','e-s3-rod','e-s3-salmo','e-s3-sell'].forEach(id => $(id).addEventListener('input', updateE));
 
 // ====================== INIT ======================
 updateB1(); updateB2(); updateB3(); updateC(); updateD(); updateE();
+
 </script>
 
 </body>
